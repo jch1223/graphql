@@ -4,40 +4,44 @@ const tweets = [
   {
     id: "1",
     text: "Hello World",
-    authorId: "1",
+    userId: "1",
   },
   {
     id: "2",
     text: "Bye World",
-    authorId: "1",
+    userId: "1",
   },
   {
     id: "3",
     text: "Hello Again",
-    authorId: "2",
+    userId: "2",
   },
 ];
 
 const users = [
   {
     id: "1",
-    username: "John Doe",
+    firstName: "John",
+    lastName: "Doe",
   },
   {
     id: "2",
-    username: "Jane Doe",
+    firstName: "Jane",
+    lastName: "Doe",
   },
 ];
 
 const typeDefs = gql`
   type User {
     id: ID
-    username: String
+    firstName: String
+    lastName: String
+    fullName: String
   }
   type Tweet {
     id: ID
     text: String
-    author: User
+    author: User!
   }
   type Query {
     allTweets: [Tweet!]!
@@ -76,6 +80,16 @@ const resolvers = {
     deleteTweet: (parent, args, context, info) => {
       tweets = tweets.filter((tweet) => tweet.id !== args.id);
       return true;
+    },
+  },
+  User: {
+    fullName: (parent, args, context, info) => {
+      return `${parent.firstName} ${parent.lastName}`;
+    },
+  },
+  Tweet: {
+    author: (parent, args, context, info) => {
+      return users.find((user) => user.id === parent.userId);
     },
   },
 };
