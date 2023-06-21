@@ -38,6 +38,9 @@ const typeDefs = gql`
     lastName: String
     fullName: String
   }
+  """
+  A Tweet object
+  """
   type Tweet {
     id: ID
     text: String
